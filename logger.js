@@ -84,6 +84,8 @@ save = function(){
     stream.write("Total Input      : " +result.inputCount+"\n");
     stream.write("Successful Inputs: " +result.correctInputs+"\n");
     stream.write("Incorrect Inputs : " +(result.inputCount-result.correctInputs)+"\n");
+    if(errorMessages!='')
+        stream.write("Errors           :\n" +errorMessages+"\n");
 
     niceWrite();
 };

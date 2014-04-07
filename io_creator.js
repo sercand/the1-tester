@@ -82,14 +82,10 @@ solve = function(input) {
     }
     return str;
 };
-generate = function(amount){
-    var result = [];
-    for(var i=0;i<amount;i++){
-        var input = randomize();
-        var output = solve(input);
-        result.push({'input':input.text,'output':output});
-    }
-    return result;
+generate = function(){
+    var input = randomize();
+    var output = solve(input);
+    return {'input':input.text,'output':output};
 };
 
 

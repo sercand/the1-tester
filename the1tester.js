@@ -27,7 +27,9 @@ var exec    = require('child_process').exec,
     executable='the1',
     buildSuccessful=true,
     test_index = 0,
-    successfulOutput=0;
+    successfulOutput= 0,
+    currentInput=null,
+    lastTest=true;
 
 var options = stdio.getopt({
     'code' :    {key: 'c', description: 'The1 source code',args:1},
@@ -39,7 +41,7 @@ if(options.source){
     source = options.source;
 }
 
-function buildCallback(error, stdout, stderr) {
+buildCallback = function (error, stdout, stderr) {
     if(stdout!=null && stdout!='')
         console.log('stdout: ' + stdout);
     if(stderr!=null && stderr!=''){
@@ -52,51 +54,71 @@ function buildCallback(error, stdout, stderr) {
     }
 
     runNextCommand();
-}
-function testCallback(error, stdout, stderr) {
-    if(stdout!=null && stdout!='')
-    {
-        //console.log(test_index + ' result: ' + stdout);
+};
+getLastIndex=function(){
+    if(options.generate){
+        return options.generate;
+    }else{
+        return data.length;
     }
+};
+getNextInput=function(){
+    if(options.generate){
+        return creator.generate();
+    }else{
+        return data[test_index];
+    }
+};
+testCallback=function (error, stdout, stderr) {
     if(stderr!=null && stderr!=''){
         console.log('error: input ' +test_index);
+        if(error!=null) {
+            console.log('exec error: ' + error);
+            logger.addInputResult(currentInput.input,currentInput.output,error,logger.errors.collapse);
+        }
         logger.addError(stderr);
+    }else if(lastTest){
+        successfulOutput+=1;
     }
-    if (error !== null) {
-        console.log('exec error: ' + error);
-        logger.addInputResult(data[test_index].input,data[test_index].output,error,logger.errors.collapse);
-    } else{
-        if(stdout == data[test_index].output){
-            successfulOutput+=1;
-        }
-        else{
-            console.log(test_index + " error:  " + data[test_index].output);
-            logger.addInputResult(data[test_index].input,data[test_index].output,stdout,logger.errors.incorrect);
-        }
+    else{
+        logger.addInputResult(currentInput.input,currentInput.output,stdout,logger.errors.incorrect);
     }
     test_index += 1;
-    if(test_index<data.length){
+    if(test_index<getLastIndex()){
         testNextInput();
     }
     else{
         runNextCommand();
     }
-}
+};
 
-function runNextCommand(){
+runNextCommand=function(){
     command_index++;
     if(command_index < commands.length){
         commands[command_index]();
     }
-}
+};
+
 testNextInput = function(){
-    if(test_index >= data.length){
+    lastTest=true;
+    if(test_index >= getLastIndex()){
         runNextCommand();
         return;
     }
     var child = exec(executable, testCallback);
-    child.stdin.write(data[test_index].input);
+
+
+    currentInput = getNextInput();
+
+    child.stdin.write(currentInput.input);
     child.stdin.end();
+    var index = 0;
+    child.stdout.on('data', function(chunk) {
+        var comp = currentInput.output.substr(index,chunk.length);
+        if(comp!==chunk)
+            lastTest=false;
+        index += chunk.length;
+    });
 };
 
 buildWindows = function(){
@@ -111,10 +133,6 @@ buildDarwin = function(){
     console.log("Application is building mac os x app");
     exec(util.format("gcc %s",source), buildCallback);
 };
-createInputs=function(amount){
-    console.log("Inputs are creating");
-    data = creator.generate(amount);
-};
 
 runTests = function(){
     if(!buildSuccessful){
@@ -127,8 +145,8 @@ runTests = function(){
 };
 saveLog = function(){
     console.log("log file is saving");
-    console.log("Score: "+100*(successfulOutput/data.length));
-    logger.addResult(data.length,successfulOutput);
+    console.log("Score: "+100*(successfulOutput/getLastIndex()));
+    logger.addResult(getLastIndex(),successfulOutput);
     logger.save();
     if(options.generate || options.save)
     {
@@ -155,7 +173,3 @@ commands.push(runTests);
 commands.push(saveLog);
 
 runNextCommand();
-
-if(options.generate){
-    createInputs(options.generate);
-}
