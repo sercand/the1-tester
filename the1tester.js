@@ -127,11 +127,11 @@ buildWindows = function(){
 };
 buildLinux = function(){
     console.log("Application is building linux app");
-    exec(util.format("gcc %s",source), buildCallback);
+    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces",executable,source), buildCallback);
 };
 buildDarwin = function(){
     console.log("Application is building mac os x app");
-    exec(util.format("gcc %s",source), buildCallback);
+    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces",executable,source), buildCallback);
 };
 
 runTests = function(){
