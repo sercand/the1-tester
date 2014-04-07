@@ -1,22 +1,20 @@
-the1-tester
-===========
-### HOW TO INSTALL
-### 1.INSTALL NODE.JS
+# HOW TO INSTALL
+## 1.INSTALL NODE.JS
 This application requires node.js for working so you must install node.js firstly.
-#WINDOWS AND MAC OS X
+###WINDOWS AND MAC OS X
 Download installer from http://nodejs.org/download/ and install it 
-#UBUNTU
+###UBUNTU
 Run following code via terminal
 
 	sudo apt-get install nodejs
     
 For more information look https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
-### 2.INSTALL THE1TESTER VIA NPM
+# 2.INSTALL the1-tester VIA NPM
 run following code
 
 	npm install the1-tester -g
     
-### USAGE
+# USAGE
 	the1tester -s
 
 This code builds 'the1.c' and tests for default 100 inputs.
