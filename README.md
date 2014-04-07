@@ -9,7 +9,7 @@ Run following code via terminal
 	sudo apt-get install nodejs
     
 For more information look https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
-# 2.INSTALL the1-tester VIA NPM
+## 2.INSTALL the1-tester VIA NPM
 run following code
 
 	npm install the1-tester -g
