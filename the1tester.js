@@ -26,7 +26,8 @@ var exec    = require('child_process').exec,
     commands = [],
     executable='the1',
     buildSuccessful=true,
-    test_index = 0;
+    test_index = 0,
+    successfulOutput=0;
 
 var options = stdio.getopt({
     'code' :    {key: 'c', description: 'The1 source code',args:1},
@@ -54,17 +55,19 @@ function buildCallback(error, stdout, stderr) {
 }
 function testCallback(error, stdout, stderr) {
     if(stdout!=null && stdout!='')
-        console.log(test_index + ' result: ' + stdout);
+    {
+        //console.log(test_index + ' result: ' + stdout);
+    }
     if(stderr!=null && stderr!=''){
-        console.log('stderr: ' + stderr);
+        console.log('error: input ' +test_index);
         logger.addError(stderr);
     }
     if (error !== null) {
         console.log('exec error: ' + error);
-        buildSuccessful = false;
+        logger.addInputResult(data[test_index].input,data[test_index].output,error,logger.errors.collapse);
     } else{
         if(stdout == data[test_index].output){
-            logger.addInputResult(data[test_index].input,data[test_index].output,stdout,logger.errors.incorrect);
+            successfulOutput+=1;
         }
         else{
             console.log(test_index + " error:  " + data[test_index].output);
@@ -124,7 +127,9 @@ runTests = function(){
 };
 saveLog = function(){
     console.log("log file is saving");
-
+    console.log("Score: "+100*(successfulOutput/data.length));
+    logger.addResult(data.length,successfulOutput);
+    logger.save();
     if(options.generate || options.save)
     {
         logger.save();
