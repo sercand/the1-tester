@@ -1,0 +1,27 @@
+{
+  "name": "the1-tester",
+  "version": "0.0.1",
+  "description": "Tester for METU CENG's Take Home Exam 1",
+  "main": "the1tester.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sercand/the1-tester.git"
+  },
+  "keywords": [
+    "metu",
+    "ceng",
+    "the"
+  ],
+  "author": "Sercan Degirmenci",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/sercand/the1-tester/issues"
+  },
+  "homepage": "https://github.com/sercand/the1-tester",
+  "dependencies": {
+    "stdio": "^0.1.5"
+  }
+}
