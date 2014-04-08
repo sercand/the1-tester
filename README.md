@@ -9,6 +9,7 @@ Run following code via terminal
 	sudo apt-get install nodejs
 	
 And
+
 	sudo ln -s /usr/bin/nodejs /usr/bin/node
 	
     
