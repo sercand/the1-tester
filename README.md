@@ -33,8 +33,8 @@ This code builds 'the1.c' and tests for default 100 inputs.
       -c, --code <arg>              The1 source code
       -g, --generate <arg>          Generate new <arg> inputs for testing
       -s, --save                    Save log file
-      -t, --tcc                     force to use tcc instead of gcc on Windows
-      -e, --exec <arg>			  Use executable file without building source code
+      -t, --tcc                     Force to use tcc instead of gcc on Windows
+      -e, --exec <arg>		    Use executable file without building source code
 
 #EXAMPLE USAGES
 creates 250 new inputs for testing and saves log file:
