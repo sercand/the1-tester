@@ -1,2 +1,4 @@
 #!/usr/bin/env node
-require('../the1tester').start();
+'use strict'
+
+require("../the1tester").start();

@@ -35,12 +35,13 @@ var exec    = require('child_process').exec,
 var options = stdio.getopt({
     'code' :    {key: 'c', description: 'The1 source code',args:1},
     'generate': {key: 'g', description: 'Generate new inputs for testing',args:1},
+    'exec' :    {key: 'e', description: 'Use executable file without building source code',args:1},
     'save' :    {key: 's', description: 'Save log file'},
-    'tcc' :     {key: 't', description: 'force to use tcc instead of gcc on Windows'}
+    'tcc' :     {key: 't', description: 'Force to use tcc instead of gcc on Windows'}
 });
 
-if(options.source){
-    source = options.source;
+if(options.code){
+    source = options.code;
 }
 
 buildCallback = function (error, stdout, stderr) {
@@ -172,15 +173,27 @@ saveLog = function(){
 var platform = os.platform();
 
 if(platform=='win32' ||platform=='win64' ){
-    executable="the1.exe";
-    commands.push(checkForGcc);
-    commands.push(buildWindows);
+    if(options.exec) {
+        executable = options.exec;
+    }else{
+        executable = "the1.exe";
+        commands.push(checkForGcc);
+        commands.push(buildWindows);
+    }
 }else if(platform=='linux2' || platform=='linux'){
-    executable="the1";
-    commands.push(buildLinux);
+    if(options.exec) {
+        executable = options.exec;
+    }else {
+        executable = "./the1";
+        commands.push(buildLinux);
+    }
 }else if(platform=='darwin'){
-    executable="the1";
-    commands.push(buildDarwin);
+    if(options.exec) {
+        executable = options.exec;
+    }else {
+        executable = "./the1";
+        commands.push(buildDarwin);
+    }
 }
 
 commands.push(runTests);
