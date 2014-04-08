@@ -11,8 +11,14 @@ Run following code via terminal
 For more information look https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 ## 2.INSTALL the1-tester VIA NPM
 run following code
+UBUNTU:
 
+	sudo npm install the1-tester -g
+
+WINDOWS
+	
 	npm install the1-tester -g
+	
     
 # USAGE
 	the1tester -s
@@ -24,7 +30,7 @@ This code builds 'the1.c' and tests for default 100 inputs.
       -c, --code <arg>              The1 source code
       -g, --generate <arg>          Generate new <arg> inputs for testing
       -s, --save                    Save log file
-	  -t, --tcc                     force to use tcc instead of gcc on Windows
+      -t, --tcc                     force to use tcc instead of gcc on Windows
 
 #EXAMPLE USAGES
 creates 250 new inputs for testing and saves log file:
