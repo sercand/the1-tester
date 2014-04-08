@@ -186,7 +186,6 @@ if(platform=='win32' ||platform=='win64' ){
 commands.push(runTests);
 commands.push(saveLog);
 
-runNextCommand();
 
 module.exports.start=function(){
     runNextCommand();
