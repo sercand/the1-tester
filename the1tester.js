@@ -29,12 +29,14 @@ var exec    = require('child_process').exec,
     test_index = 0,
     successfulOutput= 0,
     currentInput=null,
-    lastTest=true;
+    lastTest=true,
+    hasGcc=false;
 
 var options = stdio.getopt({
     'code' :    {key: 'c', description: 'The1 source code',args:1},
     'generate': {key: 'g', description: 'Generate new inputs for testing',args:1},
-    'save' :    {key: 's', description: 'Save log file'}
+    'save' :    {key: 's', description: 'Save log file'},
+    'tcc' :     {key: 't', description: 'force to use tcc instead of gcc on Windows'}
 });
 
 if(options.source){
@@ -54,6 +56,15 @@ buildCallback = function (error, stdout, stderr) {
     }
     runNextCommand();
 };
+checkForGcc=function(){
+    exec("gcc -v", function(err,stdout,stderr){
+        hasGcc = err === null;
+        if(hasGcc)
+            console.log("You have gcc!!!");
+        runNextCommand();
+    });
+};
+
 getLastIndex=function(){
     if(options.generate){
         return options.generate;
@@ -105,32 +116,36 @@ testNextInput = function(){
         return;
     }
     var child = exec(executable, testCallback);
-
-
     currentInput = getNextInput();
-
     child.stdin.write(currentInput.input);
     child.stdin.end();
     var index = 0;
     child.stdout.on('data', function(chunk) {
         var comp = currentInput.output.substr(index,chunk.length);
-        if(comp!==chunk)
-            lastTest=false;
+        if(comp !== chunk)
+            if(index + chunk.length - 1 == currentInput.output.length && chunk[chunk.length-1]==' '){
+                lastTest = comp == chunk.substr(0,chunk.length-1);
+            }else {
+                lastTest = false;
+            }
         index += chunk.length;
     });
 };
 
 buildWindows = function(){
     console.log("Application is building windows app");
-    exec(util.format("%s %s -o %s",path.resolve(__dirname, 'tcc/tcc.exe'),source,executable), buildCallback);
+    if(options.tcc || !hasGcc)
+        exec(util.format("%s %s -o %s",path.resolve(__dirname, 'tcc/tcc.exe'),source,executable), buildCallback);
+    else
+        exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces -ansi",executable,source), buildCallback);
 };
 buildLinux = function(){
     console.log("Application is building linux app");
-    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces",executable,source), buildCallback);
+    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces -ansi",executable,source), buildCallback);
 };
 buildDarwin = function(){
     console.log("Application is building mac os x app");
-    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces",executable,source), buildCallback);
+    exec(util.format("gcc -o %s %s -Wall -pedantic-errors -Wmissing-braces -ansi",executable,source), buildCallback);
 };
 
 runTests = function(){
@@ -154,13 +169,13 @@ saveLog = function(){
     runNextCommand();
 };
 
-
 var platform = os.platform();
 
 if(platform=='win32' ||platform=='win64' ){
     executable="the1.exe";
+    commands.push(checkForGcc);
     commands.push(buildWindows);
-}else if(platform=='linux2'){
+}else if(platform=='linux2' || platform=='linux'){
     executable="the1";
     commands.push(buildLinux);
 }else if(platform=='darwin'){
@@ -171,7 +186,7 @@ if(platform=='win32' ||platform=='win64' ){
 commands.push(runTests);
 commands.push(saveLog);
 
-
+runNextCommand();
 
 module.exports.start=function(){
     runNextCommand();

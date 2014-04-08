@@ -24,7 +24,7 @@ This code builds 'the1.c' and tests for default 100 inputs.
       -c, --code <arg>              The1 source code
       -g, --generate <arg>          Generate new <arg> inputs for testing
       -s, --save                    Save log file
-
+	  -t, --tcc                     force to use tcc instead of gcc on Windows
 
 #EXAMPLE USAGES
 creates 250 new inputs for testing and saves log file:
@@ -33,6 +33,6 @@ creates 250 new inputs for testing and saves log file:
 
 builds mycode.c instead of the1.c and creates 200 inputs
 
-	the1tester -c mycode.c -g 200
+	the1tester -c path/to/mycode.c -g 200
 
 
