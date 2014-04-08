@@ -7,6 +7,10 @@ Download installer from http://nodejs.org/download/ and install it
 Run following code via terminal
 
 	sudo apt-get install nodejs
+	
+And
+	sudo ln -s /usr/bin/nodejs /usr/bin/node
+	
     
 For more information look https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 ## 2.INSTALL the1-tester VIA NPM
