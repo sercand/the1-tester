@@ -4,23 +4,21 @@ This application requires node.js for working so you must install node.js firstl
 ###WINDOWS AND MAC OS X
 Download installer from http://nodejs.org/download/ and install it 
 ###UBUNTU
-Run following code via terminal
+Run following codes via terminal
 
 	sudo apt-get install nodejs
-	
-And
-
 	sudo ln -s /usr/bin/nodejs /usr/bin/node
 	
     
 For more information look https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager
 ## 2.INSTALL the1-tester VIA NPM
 run following code
-UBUNTU:
+
+###UBUNTU:
 
 	sudo npm install the1-tester -g
 
-WINDOWS
+###WINDOWS:
 	
 	npm install the1-tester -g
 	
@@ -36,6 +34,7 @@ This code builds 'the1.c' and tests for default 100 inputs.
       -g, --generate <arg>          Generate new <arg> inputs for testing
       -s, --save                    Save log file
       -t, --tcc                     force to use tcc instead of gcc on Windows
+      -e, --exec <arg>			  Use executable file without building source code
 
 #EXAMPLE USAGES
 creates 250 new inputs for testing and saves log file:
@@ -46,4 +45,10 @@ builds mycode.c instead of the1.c and creates 200 inputs
 
 	the1tester -c path/to/mycode.c -g 200
 
+run tests using 'xyz' or 'xyz.exe' executable files without build a source code
+	
+    	the1tester -e path/to/xyz -s
+        the1tester -e path/to/xyz.exe -s
 
+
+    
