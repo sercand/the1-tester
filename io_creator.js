@@ -34,7 +34,7 @@ rand = function(from,to){
 };
 
 randomize = function(){
-    var length = rand(minRightBoundary,maxRightBoundary);
+    var length = rand(minRightBoundary,maxRightBoundary-1);
     var viruses = rand(minViruses,maxViruses);
     var vs = [];
     var str = length+"\n"+viruses+"\n";
