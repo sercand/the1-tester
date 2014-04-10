@@ -81,10 +81,10 @@ getNextInput=function(){
     }
 };
 testCallback=function (error, stdout, stderr) {
-    if(stderr!=null && stderr!=''){
+    if((stderr!=null && stderr!='') ||error!=null){
         console.log('error: input ' +test_index);
         if(error!=null) {
-            console.log('exec error: ' + error);
+            console.log(error);
             logger.addInputResult(currentInput.input,currentInput.output,error,logger.errors.collapse);
         }
         logger.addError(stderr);

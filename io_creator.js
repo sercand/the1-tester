@@ -26,7 +26,7 @@ var minRightBoundary=100,
     maxSpeed=1000,
     minInterval= 1,
     maxInterval=100,
-    minNumberOfAttacks= 0,
+    minNumberOfAttacks= 1,
     maxNumberOfAttacks= 100;
 
 rand = function(from,to){
